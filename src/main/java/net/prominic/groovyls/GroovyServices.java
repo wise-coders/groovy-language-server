@@ -377,11 +377,11 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 	// --- INTERNAL
 
 	private void visitAST() {
-		if (compilationUnit == null) {
-			return;
+		if (compilationUnit != null) {
+			astVisitor = new ASTNodeVisitor();
+			astVisitor.visitCompilationUnit(compilationUnit);
+			System.out.println("Here");
 		}
-		astVisitor = new ASTNodeVisitor();
-		astVisitor.visitCompilationUnit(compilationUnit);
 	}
 
 	private void visitAST(Set<URI> uris) {
@@ -389,10 +389,9 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 			visitAST();
 			return;
 		}
-		if (compilationUnit == null) {
-			return;
+		if (compilationUnit != null) {
+			astVisitor.visitCompilationUnit(compilationUnit, uris);
 		}
-		astVisitor.visitCompilationUnit(compilationUnit, uris);
 	}
 
 	private boolean createOrUpdateCompilationUnit() {

@@ -100,6 +100,7 @@ import net.prominic.lsp.utils.Positions;
 import net.prominic.lsp.utils.Ranges;
 
 public class ASTNodeVisitor extends ClassCodeVisitorSupport {
+
 	private static class ASTLookupKey {
 		public ASTLookupKey(ASTNode node) {
 			this.node = node;
@@ -116,6 +117,11 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
 				return node == other.node;
 			}
 			return false;
+		}
+
+		@Override
+		public String toString() {
+			return node.toString();
 		}
 
 		@Override
@@ -143,8 +149,7 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
 
 	private void pushASTNode(ASTNode node) {
 		boolean isSynthetic = false;
-		if (node instanceof AnnotatedNode) {
-			AnnotatedNode annotatedNode = (AnnotatedNode) node;
+		if (node instanceof AnnotatedNode annotatedNode) {
 			isSynthetic = annotatedNode.isSynthetic();
 		}
 		if (!isSynthetic) {
@@ -237,7 +242,7 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
 				return -1;
 			}
 			return 0;
-		}).collect(Collectors.toList());
+		}).toList();
 		if (foundNodes.size() == 0) {
 			return null;
 		}

@@ -48,7 +48,7 @@ import net.prominic.groovyls.util.GroovyLSUtils;
 import net.prominic.groovyls.util.GroovyLSNodeUtils;
 
 public class SignatureHelpProvider {
-	private ASTNodeVisitor ast;
+	private final ASTNodeVisitor ast;
 
 	public SignatureHelpProvider(ASTNodeVisitor ast) {
 		this.ast = ast;
@@ -70,10 +70,9 @@ public class SignatureHelpProvider {
 		MethodCall methodCall = null;
 		ASTNode parentNode = ast.getParent(offsetNode);
 
-		if (offsetNode instanceof ArgumentListExpression) {
+		if (offsetNode instanceof ArgumentListExpression argsList) {
 			methodCall = (MethodCall) parentNode;
 
-			ArgumentListExpression argsList = (ArgumentListExpression) offsetNode;
 			List<Expression> expressions = argsList.getExpressions();
 			activeParamIndex = getActiveParameter(position, expressions);
 		}
@@ -91,8 +90,7 @@ public class SignatureHelpProvider {
 		for (MethodNode method : methods) {
 			List<ParameterInformation> parameters = new ArrayList<>();
 			Parameter[] methodParams = method.getParameters();
-			for (int i = 0; i < methodParams.length; i++) {
-				Parameter methodParam = methodParams[i];
+			for (Parameter methodParam : methodParams) {
 				ParameterInformation paramInfo = new ParameterInformation();
 				paramInfo.setLabel(GroovyLSNodeUtils.variableToString(methodParam, ast));
 				parameters.add(paramInfo);
